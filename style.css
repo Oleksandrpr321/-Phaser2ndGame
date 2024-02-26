@@ -1,0 +1,19 @@
+body {
+    position: absolute;
+    margin: 0;
+    height: 100vh;           
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#game{
+    position: relative;
+}
+
+#score{
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    
+}
