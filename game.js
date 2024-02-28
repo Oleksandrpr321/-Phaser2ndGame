@@ -68,6 +68,16 @@ function create() {
     //Слідкування камери за гравцем
     this.cameras.main.startFollow(player);
 
+    var x = 0;
+    while (x < worldWidth) {
+        var y = Phaser.Math.FloatBetween(540, 1080); // Змінено діапазон висоти платформ
+        platforms.create(x, y, 'ground').setScale(0.5).refreshBody(); // Зменшено масштаб платформ
+        x += Phaser.Math.FloatBetween(600, 800); // Збільшено відстань між платформами
+    }
+    
+
+
+
     this.anims.create({
         key: 'left',
         frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
