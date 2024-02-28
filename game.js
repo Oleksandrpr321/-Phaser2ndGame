@@ -72,7 +72,7 @@ function create() {
     while (x < worldWidth) {
         var y = Phaser.Math.FloatBetween(540, 1080); // Змінено діапазон висоти платформ
         platforms.create(x, y, 'ground').setScale(0.5).refreshBody(); // Зменшено масштаб платформ
-        x += Phaser.Math.FloatBetween(600, 800); // Збільшено відстань між платформами
+        x += Phaser.Math.FloatBetween(200, 800); // Збільшено відстань між платформами
     }
     
 
@@ -150,7 +150,7 @@ function update()
     }
 
     if (cursors.up.isDown && player.body.touching.down) {
-        player.setVelocityY(-330);
+        player.setVelocityY(-480);
     }
 
 }
