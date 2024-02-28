@@ -26,11 +26,12 @@ var score = 0;
 var gameOver = false;
 var scoreText;
 var game = new Phaser.Game(config);
-
+var worldWidth = 9600;
 
 function preload() {
     //Завантажили асетси 2
     this.load.image('fon', 'assets/fon.png');
+    this.load.image('fon+', 'assets/fon+.png');
     this.load.image('ground', 'assets/platform.png');
     this.load.image('star', 'assets/star.png');
     this.load.image('bomb', 'assets/bomb.png');
@@ -42,7 +43,8 @@ function preload() {
 
 function create() {
     //Створюємо небо 3
-    this.add.image(0, 0, 'fon').setOrigin(0,0);
+    //this.add.image(0, 0, 'fon').setOrigin(0,0);
+    this.add.tileSprite(0,0, worldWidth, 1080, "fon+").setOrigin(0,0);
     //Додаємо платформи 4
     platforms = this.physics.add.staticGroup();
 
@@ -52,7 +54,7 @@ function create() {
     platforms.create(50, 250, 'ground');
     platforms.create(750, 220, 'ground');
     //Додавання персонажа та його анімацій 5
-    player = this.physics.add.sprite(100, 450, 'dude');
+    player = this.physics.add.sprite(550, 450, 'dude');
 
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
