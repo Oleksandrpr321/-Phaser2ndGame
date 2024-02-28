@@ -47,17 +47,26 @@ function create() {
     this.add.tileSprite(0,0, worldWidth, 1080, "fon+").setOrigin(0,0);
     //Додаємо платформи 4
     platforms = this.physics.add.staticGroup();
+    //Земля на всю ширину екрану
+    for (var x = 0; x < worldWidth; x = x + 384) {
+        console.log(x)
+        platforms.create(x, 1080 - 93, 'ground').setOrigin(0,0).refreshBody();
+    }
 
-    platforms.create(900, 900, 'ground').setScale(2).refreshBody();
+   // platforms.create(900, 900, 'ground').setScale(2).refreshBody();
 
-    platforms.create(600, 400, 'ground');
-    platforms.create(50, 250, 'ground');
-    platforms.create(750, 220, 'ground');
+    //platforms.create(600, 400, 'ground');
+    //platforms.create(500, 250, 'ground');
+    //platforms.create(750, 220, 'ground');
     //Додавання персонажа та його анімацій 5
-    player = this.physics.add.sprite(550, 450, 'dude');
-
+    player = this.physics.add.sprite(1500, 900, 'dude');
     player.setBounce(0.2);
-    player.setCollideWorldBounds(true);
+    player.setCollideWorldBounds(false);
+    //Налаштування камери
+    this.cameras.main.setBounds(0,0,worldWidth, 1080);
+    this.physics.world.setBounds(0,0,worldWidth, 1080);
+    //Слідкування камери за гравцем
+    this.cameras.main.startFollow(player);
 
     this.anims.create({
         key: 'left',
@@ -84,8 +93,8 @@ function create() {
     //Додали зірочки 8
     stars = this.physics.add.group({
         key: 'star',
-        repeat: 11,
-        setXY: { x: 12, y: 0, stepX: 70 }
+        repeat: 111,
+        setXY: { x: 12, y: 0, stepX: 90 }
     });
 
     stars.children.iterate(function (child) {
@@ -143,7 +152,7 @@ function collectStar(player, star)
     scoreText.setText('Score: ' + score);
 
     // Створення бомби
-    var x = Phaser.Math.Between(0, config.width);
+    var x = Phaser.Math.Between(0, worldWidth);
     var y = Phaser.Math.Between(0, config.height);
     var bomb = bombs.create(x, 0, 'bomb');
     bomb.setScale(0.25);
