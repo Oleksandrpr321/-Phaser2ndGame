@@ -31,6 +31,7 @@ var worldWidth = 9600;
 function preload() {
     //Завантажили асетси 2
     this.load.image('fon', 'assets/fon.png');
+    this.load.image('bush', 'assets/bush.png');
     this.load.image('fon+', 'assets/fon+.png');
     this.load.image('ground', 'assets/platform.png');
     this.load.image('star', 'assets/star.png');
@@ -43,8 +44,8 @@ function preload() {
 
 function create() {
     //Створюємо небо 3
-    //this.add.image(0, 0, 'fon').setOrigin(0,0);
     this.add.tileSprite(0,0, worldWidth, 1080, "fon+").setOrigin(0,0);
+    
     //Додаємо платформи 4
     platforms = this.physics.add.staticGroup();
     //Земля на всю ширину екрану
@@ -52,13 +53,14 @@ function create() {
         console.log(x)
         platforms.create(x, 1080 - 93, 'ground').setOrigin(0,0).refreshBody();
     }
+//додаємо кущі
+var playerX = 0; // Позиція гравця на екрані по X
 
-   // platforms.create(900, 900, 'ground').setScale(2).refreshBody();
+for (var x = 0; x < worldWidth; x = x + Phaser.Math.Between(200, 800)) {
+    objects.create(x = x + Phaser.Math.Between(50, 200),1050, 'bush').setScale(Phaser.Math.FloatBetween(0.5, 2)).setDepth(Phaser.Math.Between(0,2)).setOrigin(0,1).refreshBody();
+}
 
-    //platforms.create(600, 400, 'ground');
-    //platforms.create(500, 250, 'ground');
-    //platforms.create(750, 220, 'ground');
-    //Додавання персонажа та його анімацій 5
+
     player = this.physics.add.sprite(1500, 900, 'dude');
     player.setBounce(0.2);
     player.setCollideWorldBounds(false);
@@ -72,7 +74,7 @@ function create() {
     while (x < worldWidth) {
         var y = Phaser.Math.FloatBetween(540, 1080); // Змінено діапазон висоти платформ
         platforms.create(x, y, 'ground').setScale(0.5).refreshBody(); // Зменшено масштаб платформ
-        x += Phaser.Math.FloatBetween(200, 800); // Збільшено відстань між платформами
+        x += Phaser.Math.FloatBetween(200, 700); // Збільшено відстань між платформами
     }
     
 
