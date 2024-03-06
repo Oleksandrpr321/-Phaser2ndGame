@@ -7,7 +7,7 @@ var config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 300 },
+            gravity: { y: 200 },
             debug: false
         }
     },
@@ -30,7 +30,6 @@ var worldWidth = 9600;
 var playerSpeed = 1000
 function preload() {
     //Завантажили асетси 2
-    this.load.image('fon', 'assets/fon.png');
     this.load.image('bush', 'assets/bush.png');
     this.load.image('fon+', 'assets/fon+.png');
     this.load.image('ground', 'assets/platform.png');
@@ -43,6 +42,8 @@ function preload() {
     this.load.image('skyGroundStart', 'assets/skyGroundStart.png');
     this.load.image('skyGround',      'assets/skyGround.png');
     this.load.image('skyGroundEnd',   'assets/skyGroundEnd.png');
+    this.load.image('Skeleton',   'assets/Skeleton.png');
+    this.load.image('Tree',   'assets/Tree.png');
 }
 
 function create() {
@@ -55,24 +56,46 @@ function create() {
     //Земля на всю ширину екрану
     for (var x = 0; x < worldWidth; x = x + 340) {
         console.log(x)
-        platforms.create(x, 1080 - 93, 'ground')
+        platforms.create(x, 1080 - 83, 'ground')
         .setOrigin(0,0)
         .refreshBody();
     }
 //додаємо кущі
 bush = this.physics.add.staticGroup();
 // Додавання кущів випадковим чином на всю ширину екрану
-for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(100, 300)) {
-    var y = 989;
+for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(200, 500)) {
+    var y = 1000;
     console.log(x, y);
     bush.create(x, y, 'bush')
-    .setScale(Phaser.Math.FloatBetween(0.5, 1))
+    .setScale(Phaser.Math.FloatBetween(0.3,0.7 ))
     .setOrigin(0, 1)
     .setDepth(Phaser.Math.FloatBetween(0, 10))
     .refreshBody();
 }
 
-
+//Додавання скелетів на землю
+Skeleton = this.physics.add.staticGroup();
+// Додавання скелетів випадковим чином на всю ширину екрану
+for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(200, 1000)) {
+    var y = 1000;
+    console.log(x, y);
+    Skeleton.create(x, y, 'Skeleton')
+    .setScale(Phaser.Math.FloatBetween(0.3,0.7 ))
+    .setOrigin(0, 1)
+    .setDepth(Phaser.Math.FloatBetween(0, 8))
+    .refreshBody();
+}
+// Додавання дерева 
+ Tree = this.physics.add.staticGroup();
+for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(900, 2000)) {
+    var y = 1000;
+    console.log(x, y);
+    Skeleton.create(x, y, 'Tree')
+    .setScale(Phaser.Math.FloatBetween(0.5, 1.5))
+    .setOrigin(0, 1)
+    .setDepth(Phaser.Math.FloatBetween(0, 1))
+    .refreshBody();
+}
 
     player = this.physics.add.sprite(1500, 900, 'dude');
     player.setBounce(0.2);
