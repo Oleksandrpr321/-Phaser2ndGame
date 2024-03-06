@@ -1,4 +1,4 @@
-//Конфігуруємо гру 1
+///Конфігуруємо гру 1
 var config = {
     type: Phaser.AUTO,
     width: 1920,
@@ -27,7 +27,7 @@ var gameOver = false;
 var scoreText;
 var game = new Phaser.Game(config);
 var worldWidth = 9600;
-
+var playerSpeed = 1000
 function preload() {
     //Завантажили асетси 2
     this.load.image('fon', 'assets/fon.png');
@@ -44,26 +44,36 @@ function preload() {
 
 function create() {
     //Створюємо небо 3
-    this.add.tileSprite(0,0, worldWidth, 1080, "fon+").setOrigin(0,0);
+    this.add.tileSprite(0,0, worldWidth, 1080, "fon+")
+    .setOrigin(0,0);
     
     //Додаємо платформи 4
     platforms = this.physics.add.staticGroup();
     //Земля на всю ширину екрану
     for (var x = 0; x < worldWidth; x = x + 384) {
         console.log(x)
-        platforms.create(x, 1080 - 93, 'ground').setOrigin(0,0).refreshBody();
+        platforms.create(x, 1080 - 93, 'ground')
+        .setOrigin(0,0)
+        .refreshBody();
     }
 //додаємо кущі
-var playerX = 0; // Позиція гравця на екрані по X
-
-for (var x = 0; x < worldWidth; x = x + Phaser.Math.Between(200, 800)) {
-    objects.create(x = x + Phaser.Math.Between(50, 200),1050, 'bush').setScale(Phaser.Math.FloatBetween(0.5, 2)).setDepth(Phaser.Math.Between(0,2)).setOrigin(0,1).refreshBody();
+bush = this.physics.add.staticGroup();
+// Додавання кущів випадковим чином на всю ширину екрану
+for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(100, 300)) {
+    var y = 989;
+    console.log(x, y);
+    bush.create(x, y, 'bush')
+    .setScale(Phaser.Math.FloatBetween(0.5, 1))
+    .setOrigin(0, 1)
+    .setDepth(Phaser.Math.FloatBetween(0, 10))
+    .refreshBody();
 }
+
 
 
     player = this.physics.add.sprite(1500, 900, 'dude');
     player.setBounce(0.2);
-    player.setCollideWorldBounds(false);
+    player.setCollideWorldBounds(true);
     //Налаштування камери
     this.cameras.main.setBounds(0,0,worldWidth, 1080);
     this.physics.world.setBounds(0,0,worldWidth, 1080);
@@ -72,9 +82,11 @@ for (var x = 0; x < worldWidth; x = x + Phaser.Math.Between(200, 800)) {
 
     var x = 0;
     while (x < worldWidth) {
-        var y = Phaser.Math.FloatBetween(540, 1080); // Змінено діапазон висоти платформ
-        platforms.create(x, y, 'ground').setScale(0.5).refreshBody(); // Зменшено масштаб платформ
-        x += Phaser.Math.FloatBetween(200, 700); // Збільшено відстань між платформами
+        var y = Phaser.Math.FloatBetween(540, 900); // Змінено діапазон висоти платформ
+        platforms.create(x, y, 'ground')
+        .setScale(0.5)
+        .refreshBody(); // Зменшено масштаб платформ
+        x += Phaser.Math.FloatBetween(384, 700); // Збільшено відстань між платформами
     }
     
 
