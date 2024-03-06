@@ -53,7 +53,7 @@ function create() {
     //Додаємо платформи 4
     platforms = this.physics.add.staticGroup();
     //Земля на всю ширину екрану
-    for (var x = 0; x < worldWidth; x = x + 384) {
+    for (var x = 0; x < worldWidth; x = x + 340) {
         console.log(x)
         platforms.create(x, 1080 - 93, 'ground')
         .setOrigin(0,0)
@@ -83,17 +83,9 @@ for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(100, 300)) {
     //Слідкування камери за гравцем
     this.cameras.main.startFollow(player);
 
-    //var x = 0;
-    //while (x < worldWidth) {
-      //  var y = Phaser.Math.FloatBetween(540, 900); // Змінено діапазон висоти платформ
-       // platforms.create(x, y, 'ground')
-        //.setScale(0.5)
-       // .refreshBody(); // Зменшено масштаб платформ
-      //  x += Phaser.Math.FloatBetween(384, 700); // Збільшено відстань між платформами
-   // }
-    //Рандом платформи
-    for(var x = 0; x < worldWidth; x = x + Phaser.Math.Between(256,500)){
-        var y = Phaser.Math.Between(128,810)
+  
+    for(var x = 0; x < worldWidth; x = x + Phaser.Math.Between(800,1000)){
+        var y = Phaser.Math.Between(550,810)
 
         platforms.create(x,y, 'skyGroundStart')
         var i
@@ -101,7 +93,7 @@ for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(100, 300)) {
             platforms.create(x + 128 * i, y, 'skyGround')
         }
 
-        platforms.create(x + 128 * i, y, 'skyGroudEnd')
+        platforms.create(x + 128 * i, y, 'skyGroundEnd')
     }
 
 
