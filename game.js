@@ -1,4 +1,4 @@
-///Конфігуруємо гру 1
+////Конфігуруємо гру 1
 var config = {
     type: Phaser.AUTO,
     width: 1920,
@@ -40,9 +40,9 @@ function preload() {
         'assets/dude.png',
         { frameWidth: 32, frameHeight: 48 }
     );
-    this.load.image('skyGroundStart', 'assets/png/tile/skyGroundStart.png');
-    this.load.image('skyGround',      'assets/png/tile/skyGround.png');
-    this.load.image('skyGroundEnd',   'assets/png/tile/skyGroundEnd.png');
+    this.load.image('skyGroundStart', 'assets/skyGroundStart.png');
+    this.load.image('skyGround',      'assets/skyGround.png');
+    this.load.image('skyGroundEnd',   'assets/skyGroundEnd.png');
 }
 
 function create() {
