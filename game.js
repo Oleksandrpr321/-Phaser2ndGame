@@ -40,9 +40,9 @@ function preload() {
         'assets/dude.png',
         { frameWidth: 32, frameHeight: 48 }
     );
-    this.load.image('skyGroundStart', 'assets/Tile(14).png');
-    this.load.image('skyGround', 'assets/Tile(15).png');
-    this.load.image('skyGroundEnd', 'assets/Tile(16).png');
+    this.load.image('skyGroundStart', 'assets/png/tile/14.png');
+    this.load.image('skyGround',      'assets/png/tile/15.png');
+    this.load.image('skyGroundEnd',   'assets/png/tile/16.png');
 }
 
 function create() {
@@ -91,14 +91,14 @@ for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(100, 300)) {
        // .refreshBody(); // Зменшено масштаб платформ
       //  x += Phaser.Math.FloatBetween(384, 700); // Збільшено відстань між платформами
    // }
-    //Радом платформи
-    for(var x = 0; x < worldWidth; x = x + Phaser.Math.Between(256,500)){
-        var y = Phaser.Math.Between(128,810)
+    //Рандом платформи
+    for(var x = 0; x < worldWidth; x = x + Phaser.Math.Between(300,900)){
+        var y = Phaser.Math.Between(500,810)
 
         platforms.create(x,y, 'skyGroundStart')
         var i
         for( i = 1; i<= Phaser.Math.Between(1,5);i++ ) {
-            platforms.create(x + 128 * i, y, 'skyground')
+            platforms.create(x + 128 * i, y, 'skyGround')
         }
         platforms.create(x + 128 * i, y, 'skyGroudEnd')
     }
