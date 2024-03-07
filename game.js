@@ -28,6 +28,7 @@ var scoreText;
 var game = new Phaser.Game(config);
 var worldWidth = 9600;
 var playerSpeed = 1000
+var collectStarSound; // Оголошуємо змінну для збереження звуку
 function preload() {
     //Завантажили асетси 2
     this.load.image('bush', 'assets/bush.png');
@@ -44,6 +45,7 @@ function preload() {
     this.load.image('skyGroundEnd',   'assets/skyGroundEnd.png');
     this.load.image('Skeleton',   'assets/Skeleton.png');
     this.load.image('Tree',   'assets/Tree.png');
+   // this.load.audio('collectStarSound',   'assets/collectStarSound.mp3');
 }
 
 function create() {
@@ -96,6 +98,15 @@ for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(900, 2000)) {
     .setDepth(Phaser.Math.FloatBetween(0, 1))
     .refreshBody();
 }
+//Додавання звуку
+//collectStarSound = this.sound.add('collectStarSound');
+//function collectStar(player, star) 
+//{
+    // Виклик звуку під час збору зірочки
+  //  collectStarSound.play();
+
+//}
+
 
     player = this.physics.add.sprite(1500, 900, 'dude');
     player.setBounce(0.2);
