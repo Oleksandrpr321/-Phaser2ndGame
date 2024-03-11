@@ -109,6 +109,8 @@ var resetButton = this.add.text(50, 50, 'RESET')
 resetButton.on('pointerdown', () => {      
     this.scene.restart(); 
     lives = 3
+    score = 0
+    gameOver = false
 });
 
 
@@ -254,15 +256,44 @@ function collectStar(player, star)
         });
     }
 }
+var isHitByBomb = false; // Додайте цю змінну
 
 function hitBomb(player, bomb) 
 {
+    // Перевірка, чи гравець вже отримав шкоду від бомби
+    if (isHitByBomb) {
+        return;
+    }
+
+    // Встановлення isHitByBomb в true, щоб блокувати подальші виклики функції
+    isHitByBomb = true;
+
     lives = lives - 1;
     livesText.setText('Lives: ' + lives);
-    //this.physics.pause();
-    //player.setTint(0xff0000);
-    //player.anims.play('turn');
-   //
-   //gameOver = true;
-    
+
+    // Визначення напрямку відштовхування бомби
+    var direction = (bomb.x < player.x) ? 1 : -1;
+
+    // Встановлення швидкості бомби для відштовхування
+    bomb.setVelocityX(300 * direction);
+
+    // Помітити гравця червоним
+    player.setTint(0xff0000);
+
+    // Запуск таймера для скасування ефекту червоного кольору через 3 секунди
+    this.time.addEvent({
+        delay: 3000,  // 3000 мілісекунд = 3 секунди
+        callback: function() {
+            player.clearTint();  // Скасування червоного кольору
+            isHitByBomb = false; // Позначте, що таймер завершено
+        },
+        callbackScope: this,
+        loop: false
+    });
+    if (lives === 0) {
+        gameOver = true;
+        this.physics.pause();
+        player.setTint(0xff0000);
+        player.anims.play('turn');
+    }
 }
