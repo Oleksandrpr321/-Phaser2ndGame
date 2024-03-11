@@ -99,7 +99,10 @@ for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(900, 2000)) {
     .setDepth(Phaser.Math.FloatBetween(0, 1))
     .refreshBody();
 }
-var resetButton = this.add.text(50, 50, 'RESET').setInteractive().setScale(2);
+var resetButton = this.add.text(50, 50, 'RESET')
+.setInteractive()
+.setScale(2)
+.setScrollFactor(0);
 
 resetButton.on('pointerdown', () => {      
     this.scene.restart(); 
@@ -183,7 +186,7 @@ resetButton.on('pointerdown', () => {
     lives = this.add.text(1700, 16, 'Lives: ' + lives, { fontSize: '32px', fill: '#ffffff'})
         .setOrigin(0,0)
         .setScrollFactor(0);
-
+       
     //Додали зіткнення зірок з платформами 9
     this.physics.add.collider(player, platforms);
     this.physics.add.collider(stars, platforms);
@@ -251,12 +254,9 @@ function collectStar(player, star)
 
 function hitBomb(player, bomb) 
 {
+    //this.physics.pause();
+   // player.setTint(0xff0000);
+    //player.anims.play('turn');
+   // gameOver = true;
     
-    this.physics.pause();
-
-    player.setTint(0xff0000);
-
-    player.anims.play('turn');
-
-    gameOver = true;
 }
