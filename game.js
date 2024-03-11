@@ -17,6 +17,7 @@ var config = {
         update: update
     }
 };
+
 var lives = 3;
 var player;
 var stars;
@@ -26,6 +27,7 @@ var cursors;
 var score = 0;
 var gameOver = false;
 var scoreText;
+var livesText;
 var game = new Phaser.Game(config);
 var worldWidth = 9600;
 var playerSpeed = 1000
@@ -183,7 +185,7 @@ resetButton.on('pointerdown', () => {
         .setScrollFactor(0);
 
     //Додавання життів
-    lives = this.add.text(1700, 16, 'Lives: ' + lives, { fontSize: '32px', fill: '#ffffff'})
+    livesText = this.add.text(1700, 16, 'Lives: ' + lives, { fontSize: '32px', fill: '#ffffff'})
         .setOrigin(0,0)
         .setScrollFactor(0);
        
@@ -254,9 +256,12 @@ function collectStar(player, star)
 
 function hitBomb(player, bomb) 
 {
-    //this.physics.pause();
-   // player.setTint(0xff0000);
-    //player.anims.play('turn');
-   // gameOver = true;
+    lives = lives - 1;
+    livesText.setText('Lives: ' + lives);
+    this.physics.pause();
+    player.setTint(0xff0000);
+    player.anims.play('turn');
+   //
+   //gameOver = true;
     
 }
