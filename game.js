@@ -17,6 +17,7 @@ var config = {
         update: update
     }
 };
+var lives = 3;
 var player;
 var stars;
 var bombs;
@@ -98,6 +99,13 @@ for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(900, 2000)) {
     .setDepth(Phaser.Math.FloatBetween(0, 1))
     .refreshBody();
 }
+var resetButton = this.add.text(50, 50, 'RESET').setInteractive().setScale(2);
+
+resetButton.on('pointerdown', () => {      
+    this.scene.restart(); 
+});
+
+
 //Додавання звуку
 //collectStarSound = this.sound.add('collectStarSound');
 //function collectStar(player, star) 
@@ -157,8 +165,8 @@ for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(900, 2000)) {
     //Додали зірочки 8
     stars = this.physics.add.group({
         key: 'star',
-        repeat: 111,
-        setXY: { x: 12, y: 0, stepX: 90 }
+        repeat: worldWidth/100,
+        setXY: { x: 12, y: 0, stepX: 100 }
     });
 
     stars.children.iterate(function (child) {
@@ -167,7 +175,14 @@ for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(900, 2000)) {
 
     });
     bombs = this.physics.add.group();
-    scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#ffffff' });
+    scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#ffffff' })
+        .setOrigin(0,0)
+        .setScrollFactor(0);
+
+    //Додавання життів
+    lives = this.add.text(1700, 16, 'Lives: ' + lives, { fontSize: '32px', fill: '#ffffff'})
+        .setOrigin(0,0)
+        .setScrollFactor(0);
 
     //Додали зіткнення зірок з платформами 9
     this.physics.add.collider(player, platforms);
@@ -236,6 +251,7 @@ function collectStar(player, star)
 
 function hitBomb(player, bomb) 
 {
+    
     this.physics.pause();
 
     player.setTint(0xff0000);
