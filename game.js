@@ -7,7 +7,7 @@ var config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 200 },
+            gravity: { y: 300 },
             debug: false
         }
     },
@@ -167,7 +167,7 @@ for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(900, 2000)) {
 
     });
     bombs = this.physics.add.group();
-    scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+    scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#ffffff' });
 
     //Додали зіткнення зірок з платформами 9
     this.physics.add.collider(player, platforms);
