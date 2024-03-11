@@ -108,6 +108,7 @@ var resetButton = this.add.text(50, 50, 'RESET')
 
 resetButton.on('pointerdown', () => {      
     this.scene.restart(); 
+    lives = 3
 });
 
 
@@ -258,9 +259,9 @@ function hitBomb(player, bomb)
 {
     lives = lives - 1;
     livesText.setText('Lives: ' + lives);
-    this.physics.pause();
-    player.setTint(0xff0000);
-    player.anims.play('turn');
+    //this.physics.pause();
+    //player.setTint(0xff0000);
+    //player.anims.play('turn');
    //
    //gameOver = true;
     
