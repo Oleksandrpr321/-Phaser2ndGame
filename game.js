@@ -17,8 +17,9 @@ var config = {
         update: update
     }
 };
+var resetButton;
 var lifeLine = ''
-var life = 3;
+var life = 4;
 var player;
 var stars;
 var bombs;
@@ -49,6 +50,7 @@ function preload() {
     this.load.image('Skeleton', 'assets/Skeleton.png');
     this.load.image('Tree', 'assets/Tree.png');
     // this.load.audio('collectStarSound',   'assets/collectStarSound.mp3');
+    this.load.image('resetButton', 'assets/resetButton.png');
 }
 
 function create() {
@@ -79,17 +81,17 @@ function create() {
     createWorldObjects(Tree, 'Tree')
   
   
-    var resetButton = this.add.text(50, 50, 'RESET')
-        .setInteractive()
-        .setScale(2)
-        .setScrollFactor(0);
-
-    resetButton.on('pointerdown', () => {
-        this.scene.restart();
-        life = 3
-        score = 0
-        gameOver = false
+    resetButton = this.add.image(900, 500, 'resetButton')
+    resetButton.setOrigin(0,0)
+    .setDepth(10)
+    .setScrollFactor(0)
+    .setInteractive()
+    .on('pointerdown', function() {
+        // Перезавантаження гри
+        location.reload();
     });
+
+    resetButton.setVisible(false); // Початково ховаємо кнопку
 
 
    
@@ -193,11 +195,18 @@ function update() {
 
         player.anims.play('turn');
     }
+    {
+        if (gameOver) {
+            return;
+        }
 
     if (cursors.up.isDown && player.body.touching.down) {
         player.setVelocityY(-480);
     }
 
+    
+
+}
 }
 //Додали збирання зірок персонажем 11
 function collectStar(player, star) {
@@ -232,6 +241,7 @@ function hitBomb(player, bomb) {
     lifeText.setText(showLife())
 
     if (life === 0) {
+        resetButton.setVisible(true);
         gameOver = true;
         this.physics.pause();
         player.setTint(0xff0000);
