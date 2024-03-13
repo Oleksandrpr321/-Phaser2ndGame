@@ -231,7 +231,30 @@ function hitBomb(player, bomb) {
     life -= 1
     lifeText.setText(showLife())
 
+<<<<<<< Updated upstream
     if (life === 0) {
+=======
+    // Визначення напрямку відштовхування бомби
+    var direction = (bomb.x < player.x) ? 1 : -1;
+
+    // Встановлення швидкості бомби для відштовхування
+    bomb.setVelocityX(300 * direction);
+
+    // Помітити гравця червоним
+    player.setTint(0xff0000);
+
+    // Запуск таймера для скасування ефекту червоного кольору через 3 секунди
+    this.time.addEvent({
+        delay: 2000,  // 1000 мілісекунд = 1 секунди
+        callback: function() {
+            player.clearTint();  // Скасування червоного кольору
+            isHitByBomb = false; // Позначте, що таймер завершено
+        },
+        callbackScope: this,
+        loop: false
+    });
+    if (lives === 0) {
+>>>>>>> Stashed changes
         gameOver = true;
         this.physics.pause();
         player.setTint(0xff0000);
