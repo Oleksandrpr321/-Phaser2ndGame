@@ -67,40 +67,18 @@ function create() {
     }
     //додаємо кущі
     bush = this.physics.add.staticGroup();
-    // Додавання кущів випадковим чином на всю ширину екрану
-    for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(200, 500)) {
-        var y = 1000;
-        console.log(x, y);
-        bush.create(x, y, 'bush')
-            .setScale(Phaser.Math.FloatBetween(0.3, 0.7))
-            .setOrigin(0, 1)
-            .setDepth(Phaser.Math.FloatBetween(0, 10))
-            .refreshBody();
-    }
+    createWorldObjects(bush, 'bush')
+    
 
     //Додавання скелетів на землю
     Skeleton = this.physics.add.staticGroup();
-    // Додавання скелетів випадковим чином на всю ширину екрану
-    for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(200, 1000)) {
-        var y = 1000;
-        console.log(x, y);
-        Skeleton.create(x, y, 'Skeleton')
-            .setScale(Phaser.Math.FloatBetween(0.3, 0.7))
-            .setOrigin(0, 1)
-            .setDepth(Phaser.Math.FloatBetween(0, 8))
-            .refreshBody();
-    }
+    createWorldObjects(Skeleton, 'Skeleton')
+   
     // Додавання дерева 
     Tree = this.physics.add.staticGroup();
-    for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(900, 2000)) {
-        var y = 1000;
-        console.log(x, y);
-        Skeleton.create(x, y, 'Tree')
-            .setScale(Phaser.Math.FloatBetween(0.5, 1.5))
-            .setOrigin(0, 1)
-            .setDepth(Phaser.Math.FloatBetween(0, 1))
-            .refreshBody();
-    }
+    createWorldObjects(Tree, 'Tree')
+  
+  
     var resetButton = this.add.text(50, 50, 'RESET')
         .setInteractive()
         .setScale(2)
@@ -245,7 +223,7 @@ function collectStar(player, star) {
         });
     }
 }
-// var isHitByBomb = false; 
+
 function hitBomb(player, bomb) {
     bomb.disableBody(true, true);
     isHitByBomb = true;
@@ -268,4 +246,17 @@ function showLife() {
         lifeLine = lifeLine + '💖'
     }
     return lifeLine
+}
+
+function createWorldObjects(object, asset){
+    // Додавання кущів випадковим чином на всю ширину екрану
+    for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(200, 500)) {
+        var y = 1000;
+        console.log(x, y);
+        bush.create(x, y, asset)
+            .setScale(Phaser.Math.FloatBetween(0.3, 0.7))
+            .setOrigin(0, 1)
+            .setDepth(Phaser.Math.FloatBetween(1, 10))
+            .refreshBody();
+}
 }
