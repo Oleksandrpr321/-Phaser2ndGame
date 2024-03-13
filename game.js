@@ -3,7 +3,7 @@ var config = {
     type: Phaser.AUTO,
     width: 1920,
     height: 1080,
-    parent:game,
+    parent: game,
     physics: {
         default: 'arcade',
         arcade: {
@@ -17,8 +17,8 @@ var config = {
         update: update
     }
 };
-
-var lives = 3;
+var lifeLine = ''
+var life = 3;
 var player;
 var stars;
 var bombs;
@@ -27,7 +27,7 @@ var cursors;
 var score = 0;
 var gameOver = false;
 var scoreText;
-var livesText;
+var lifeText;
 var game = new Phaser.Game(config);
 var worldWidth = 9600;
 var playerSpeed = 1000
@@ -44,102 +44,95 @@ function preload() {
         { frameWidth: 32, frameHeight: 48 }
     );
     this.load.image('skyGroundStart', 'assets/skyGroundStart.png');
-    this.load.image('skyGround',      'assets/skyGround.png');
-    this.load.image('skyGroundEnd',   'assets/skyGroundEnd.png');
-    this.load.image('Skeleton',   'assets/Skeleton.png');
-    this.load.image('Tree',   'assets/Tree.png');
-   // this.load.audio('collectStarSound',   'assets/collectStarSound.mp3');
+    this.load.image('skyGround', 'assets/skyGround.png');
+    this.load.image('skyGroundEnd', 'assets/skyGroundEnd.png');
+    this.load.image('Skeleton', 'assets/Skeleton.png');
+    this.load.image('Tree', 'assets/Tree.png');
+    // this.load.audio('collectStarSound',   'assets/collectStarSound.mp3');
 }
 
 function create() {
     //Створюємо небо 3
-    this.add.tileSprite(0,0, worldWidth, 1080, "fon+")
-    .setOrigin(0,0);
-    
+    this.add.tileSprite(0, 0, worldWidth, 1080, "fon+")
+        .setOrigin(0, 0);
+
     //Додаємо платформи 4
     platforms = this.physics.add.staticGroup();
     //Земля на всю ширину екрану
     for (var x = 0; x < worldWidth; x = x + 340) {
         console.log(x)
         platforms.create(x, 1080 - 83, 'ground')
-        .setOrigin(0,0)
-        .refreshBody();
+            .setOrigin(0, 0)
+            .refreshBody();
     }
-//додаємо кущі
-bush = this.physics.add.staticGroup();
-// Додавання кущів випадковим чином на всю ширину екрану
-for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(200, 500)) {
-    var y = 1000;
-    console.log(x, y);
-    bush.create(x, y, 'bush')
-    .setScale(Phaser.Math.FloatBetween(0.3,0.7 ))
-    .setOrigin(0, 1)
-    .setDepth(Phaser.Math.FloatBetween(0, 10))
-    .refreshBody();
-}
+    //додаємо кущі
+    bush = this.physics.add.staticGroup();
+    // Додавання кущів випадковим чином на всю ширину екрану
+    for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(200, 500)) {
+        var y = 1000;
+        console.log(x, y);
+        bush.create(x, y, 'bush')
+            .setScale(Phaser.Math.FloatBetween(0.3, 0.7))
+            .setOrigin(0, 1)
+            .setDepth(Phaser.Math.FloatBetween(0, 10))
+            .refreshBody();
+    }
 
-//Додавання скелетів на землю
-Skeleton = this.physics.add.staticGroup();
-// Додавання скелетів випадковим чином на всю ширину екрану
-for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(200, 1000)) {
-    var y = 1000;
-    console.log(x, y);
-    Skeleton.create(x, y, 'Skeleton')
-    .setScale(Phaser.Math.FloatBetween(0.3,0.7 ))
-    .setOrigin(0, 1)
-    .setDepth(Phaser.Math.FloatBetween(0, 8))
-    .refreshBody();
-}
-// Додавання дерева 
- Tree = this.physics.add.staticGroup();
-for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(900, 2000)) {
-    var y = 1000;
-    console.log(x, y);
-    Skeleton.create(x, y, 'Tree')
-    .setScale(Phaser.Math.FloatBetween(0.5, 1.5))
-    .setOrigin(0, 1)
-    .setDepth(Phaser.Math.FloatBetween(0, 1))
-    .refreshBody();
-}
-var resetButton = this.add.text(50, 50, 'RESET')
-.setInteractive()
-.setScale(2)
-.setScrollFactor(0);
+    //Додавання скелетів на землю
+    Skeleton = this.physics.add.staticGroup();
+    // Додавання скелетів випадковим чином на всю ширину екрану
+    for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(200, 1000)) {
+        var y = 1000;
+        console.log(x, y);
+        Skeleton.create(x, y, 'Skeleton')
+            .setScale(Phaser.Math.FloatBetween(0.3, 0.7))
+            .setOrigin(0, 1)
+            .setDepth(Phaser.Math.FloatBetween(0, 8))
+            .refreshBody();
+    }
+    // Додавання дерева 
+    Tree = this.physics.add.staticGroup();
+    for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(900, 2000)) {
+        var y = 1000;
+        console.log(x, y);
+        Skeleton.create(x, y, 'Tree')
+            .setScale(Phaser.Math.FloatBetween(0.5, 1.5))
+            .setOrigin(0, 1)
+            .setDepth(Phaser.Math.FloatBetween(0, 1))
+            .refreshBody();
+    }
+    var resetButton = this.add.text(50, 50, 'RESET')
+        .setInteractive()
+        .setScale(2)
+        .setScrollFactor(0);
 
-resetButton.on('pointerdown', () => {      
-    this.scene.restart(); 
-    lives = 3
-    score = 0
-    gameOver = false
-});
+    resetButton.on('pointerdown', () => {
+        this.scene.restart();
+        life = 3
+        score = 0
+        gameOver = false
+    });
 
 
-//Додавання звуку
-//collectStarSound = this.sound.add('collectStarSound');
-//function collectStar(player, star) 
-//{
-    // Виклик звуку під час збору зірочки
-  //  collectStarSound.play();
-
-//}
+   
 
 
     player = this.physics.add.sprite(1500, 900, 'dude');
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
     //Налаштування камери
-    this.cameras.main.setBounds(0,0,worldWidth, 1080);
-    this.physics.world.setBounds(0,0,worldWidth, 1080);
+    this.cameras.main.setBounds(0, 0, worldWidth, 1080);
+    this.physics.world.setBounds(0, 0, worldWidth, 1080);
     //Слідкування камери за гравцем
     this.cameras.main.startFollow(player);
 
-  
-    for(var x = 0; x < worldWidth; x = x + Phaser.Math.Between(800,1000)){
-        var y = Phaser.Math.Between(550,810)
+//Рандом платформи в повітрі
+    for (var x = 0; x < worldWidth; x = x + Phaser.Math.Between(800, 1000)) {
+        var y = Phaser.Math.Between(550, 810)
 
-        platforms.create(x,y, 'skyGroundStart')
+        platforms.create(x, y, 'skyGroundStart')
         var i
-        for( i = 1; i<= Phaser.Math.Between(1,5); i++ ) {
+        for (i = 1; i <= Phaser.Math.Between(1, 5); i++) {
             platforms.create(x + 128 * i, y, 'skyGround')
         }
 
@@ -147,7 +140,7 @@ resetButton.on('pointerdown', () => {
     }
 
 
-
+    //Анімація персонажа
     this.anims.create({
         key: 'left',
         frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
@@ -167,13 +160,13 @@ resetButton.on('pointerdown', () => {
         frameRate: 10,
         repeat: -1
     });
-    
+
     //Додали курсор 6
     cursors = this.input.keyboard.createCursorKeys();
     //Додали зірочки 8
     stars = this.physics.add.group({
         key: 'star',
-        repeat: worldWidth/100,
+        repeat: worldWidth / 100,
         setXY: { x: 12, y: 0, stepX: 100 }
     });
 
@@ -184,14 +177,14 @@ resetButton.on('pointerdown', () => {
     });
     bombs = this.physics.add.group();
     scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#ffffff' })
-        .setOrigin(0,0)
+        .setOrigin(0, 0)
         .setScrollFactor(0);
 
     //Додавання життів
-    livesText = this.add.text(1700, 16, 'Lives: ' + lives, { fontSize: '32px', fill: '#ffffff'})
-        .setOrigin(0,0)
+    lifeText = this.add.text(1700, 16, showLife(), { fontSize: '32px', fill: '#ffffff' })
+        .setOrigin(0, 0)
         .setScrollFactor(0);
-       
+
     //Додали зіткнення зірок з платформами 9
     this.physics.add.collider(player, platforms);
     this.physics.add.collider(stars, platforms);
@@ -202,15 +195,12 @@ resetButton.on('pointerdown', () => {
     this.physics.add.collider(player, bombs, hitBomb, null, this);
 }
 
-function update() 
-{
-    if (gameOver)
-    {
+function update() {
+    if (gameOver) {
         return;
     }
     //Управління персонажем 7
-    if (cursors.left.isDown) 
-    {
+    if (cursors.left.isDown) {
         player.setVelocityX(-160);
 
         player.anims.play('left', true);
@@ -232,8 +222,7 @@ function update()
 
 }
 //Додали збирання зірок персонажем 11
-function collectStar(player, star) 
-{
+function collectStar(player, star) {
     star.disableBody(true, true);
     score += 10;
     scoreText.setText('Score: ' + score);
@@ -256,44 +245,27 @@ function collectStar(player, star)
         });
     }
 }
-var isHitByBomb = false; // Додайте цю змінну
-
-function hitBomb(player, bomb) 
-{
-    // Перевірка, чи гравець вже отримав шкоду від бомби
-    if (isHitByBomb) {
-        return;
-    }
-
-    // Встановлення isHitByBomb в true, щоб блокувати подальші виклики функції
+// var isHitByBomb = false; 
+function hitBomb(player, bomb) {
+    bomb.disableBody(true, true);
     isHitByBomb = true;
 
-    lives = lives - 1;
-    livesText.setText('Lives: ' + lives);
+    life -= 1
+    lifeText.setText(showLife())
 
-    // Визначення напрямку відштовхування бомби
-    var direction = (bomb.x < player.x) ? 1 : -1;
-
-    // Встановлення швидкості бомби для відштовхування
-    bomb.setVelocityX(300 * direction);
-
-    // Помітити гравця червоним
-    player.setTint(0xff0000);
-
-    // Запуск таймера для скасування ефекту червоного кольору через 3 секунди
-    this.time.addEvent({
-        delay: 3000,  // 3000 мілісекунд = 3 секунди
-        callback: function() {
-            player.clearTint();  // Скасування червоного кольору
-            isHitByBomb = false; // Позначте, що таймер завершено
-        },
-        callbackScope: this,
-        loop: false
-    });
-    if (lives === 0) {
+    if (life === 0) {
         gameOver = true;
         this.physics.pause();
         player.setTint(0xff0000);
         player.anims.play('turn');
     }
+}
+
+function showLife() {
+    var lifeLine = ''
+
+    for (var i = 0; i < life; i++) {
+        lifeLine = lifeLine + '💖'
+    }
+    return lifeLine
 }
