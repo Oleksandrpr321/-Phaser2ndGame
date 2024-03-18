@@ -52,6 +52,7 @@ function preload() {
     // this.load.audio('collectStarSound',   'assets/collectStarSound.mp3');
     this.load.image('resetButton', 'assets/resetButton.png');
     this.load.image('heart', 'assets/life.png');
+    this.load.image('enemy', 'assets/zombie.png');
 }
 
 function create() {
@@ -193,6 +194,12 @@ function create() {
     //Перевіримо чи перекривається персонаж зіркою 10
     this.physics.add.overlap(player, stars, collectStar, null, this);
     this.physics.add.collider(player, bombs, hitBomb, null, this);
+
+//     //Ворог
+//     enemy.children.iterate(function(child){
+// child.setCollideWorldBounds(true);
+//     });
+//     this.physics.add.collider(enemy, player);
 }
 
 function update() {
@@ -223,7 +230,9 @@ function update() {
     if (cursors.up.isDown && player.body.touching.down) {
         player.setVelocityY(-480);
     }
+// enemy.children.iterate(function(child){
 
+// });
     
 
 }
