@@ -19,7 +19,7 @@ var config = {
 };
 var resetButton;
 var lifeLine = ''
-var life = 4;
+var life = 3;
 var player;
 var stars;
 var bombs;
@@ -51,6 +51,7 @@ function preload() {
     this.load.image('Tree', 'assets/Tree.png');
     // this.load.audio('collectStarSound',   'assets/collectStarSound.mp3');
     this.load.image('resetButton', 'assets/resetButton.png');
+    this.load.image('heart', 'assets/life.png');
 }
 
 function create() {
@@ -162,9 +163,28 @@ function create() {
 
     //Додавання життів
     lifeText = this.add.text(1700, 16, showLife(), { fontSize: '32px', fill: '#ffffff' })
-        .setOrigin(0, 0)
+        .setOrigin(1, 0)
         .setScrollFactor(0);
-
+        heart = this.physics.add.group({
+            key: 'heart',
+            repeat: 10,
+            setXY: { x: 12, y: 0, stepX: Phaser.Math.FloatBetween(1000, 2500) }
+        }); 
+        heart.children.iterate(function(child) {
+            child.setScale(0.07);
+        });
+    
+        heart.children.iterate(function (child) {
+    
+            child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+    
+        });
+    
+        // коллайдер життів та платформ
+        this.physics.add.collider(heart, platforms);
+    
+        //  стикання колайдера гравця з колайдером життів
+        this.physics.add.overlap(player, heart, collectHeart, null, this);
     //Додали зіткнення зірок з платформами 9
     this.physics.add.collider(player, platforms);
     this.physics.add.collider(stars, platforms);
@@ -256,6 +276,15 @@ function showLife() {
         lifeLine = lifeLine + '💖'
     }
     return lifeLine
+}
+function collectHeart(player, heart) {
+    heart.disableBody(true, true);
+
+    life += 1;
+
+    lifeText.setText(showLife());
+
+    console.log(life)
 }
 
 function createWorldObjects(object, asset){
