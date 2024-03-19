@@ -32,7 +32,9 @@ var lifeText;
 var game = new Phaser.Game(config);
 var worldWidth = 9600;
 var playerSpeed = 1000
-var collectStarSound; // Оголошуємо змінну для збереження звуку
+// var collectStarSound; // Оголошуємо змінну для збереження звуку
+var bullets;
+
 function preload() {
     //Завантажили асетси 2
     this.load.image('bush', 'assets/bush.png');
@@ -52,7 +54,8 @@ function preload() {
     // this.load.audio('collectStarSound',   'assets/collectStarSound.mp3');
     this.load.image('resetButton', 'assets/resetButton.png');
     this.load.image('heart', 'assets/life.png');
-    this.load.image('enemy', 'assets/zombie.png');
+    //this.load.image('enemy', 'assets/zombie.png');
+    this.load.image('bullett', 'assets/bullet1.png')
 }
 
 function create() {
@@ -234,7 +237,22 @@ function update() {
 
 // });
     
+bullets = this.physics.add.group();
 
+this.physics.add.collider(bullets, platforms, function (bullet) {
+    bullet.destroy();
+}, null, this);
+
+this.input.on('pointerdown', function (pointer) {
+    if (pointer.leftButtonDown()) {
+        fireBullet();
+    }
+}, this);
+
+this.physics.add.overlap(bullets, stars, destroyBulletAndObject, null, this);
+this.physics.add.overlap(bullets, bombs, destroyBulletAndObject, null, this);
+this.physics.add.overlap(bullets, Skeleton, destroyBulletAndObject, null, this);
+this.physics.add.overlap(bullets, bush, destroyBulletAndObject, null, this);
 }
 }
 //Додали збирання зірок персонажем 11
@@ -307,4 +325,19 @@ function createWorldObjects(object, asset){
             .setDepth(Phaser.Math.FloatBetween(1, 10))
             .refreshBody();
 }
+}
+function fireBullet() {
+    var bullet = bullets.create(player.x, player.y, 'bullett');
+    bullet.setScale(0.1).setVelocityX(player.flipX ? -500 : 500); // Встановлення швидкості снаряду в залежності від напрямку гравця
+
+    // Визначення напрямку, в якому дивиться гравець і встановлення відповідного значення швидкості по горизонталі
+    if (cursors.left.isDown) {
+        bullet.setVelocityX(-config.playerSpeed).setFlipX(true);
+    } else {
+        bullet.setVelocityX(config.playerSpeed);
+    }
+}
+function destroyBulletAndObject(bullet, object) {
+    bullet.destroy();
+    object.destroy();
 }
