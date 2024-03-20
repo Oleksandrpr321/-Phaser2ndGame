@@ -35,7 +35,7 @@ var playerSpeed = 1000
 // var collectStarSound; // Оголошуємо змінну для збереження звуку
 var fire;
 var enemy;
-var enemyCount
+var enemyCount = 3
 var enemyText
 var symbolLine
 var symbol
@@ -229,9 +229,13 @@ enemyText = this.add.text(300,50, showTextSymbols('👹', enemyCount),{fontSize:
 .setOrigin(0,0)
 .setScrollFactor(0)
 this.physics.add.collider(enemy, platforms);
+
+
+
 }
 
 function update() {
+    
     //Агро радіус
     if (Math.abs(player.x - enemy.x) < 600) {
         enemy.moveTo(player, player.x, player.y, 300,1)
@@ -348,21 +352,7 @@ function createWorldObjects(object, asset){
             .refreshBody();
 }
 }
-function fireBullet() {
-    var bullet = bullets.create(player.x, player.y, 'bullett');
-    bullet.setScale(0.1).setVelocityX(player.flipX ? -500 : 500); // Встановлення швидкості снаряду в залежності від напрямку гравця
 
-    // Визначення напрямку, в якому дивиться гравець і встановлення відповідного значення швидкості по горизонталі
-    if (cursors.left.isDown) {
-        bullet.setVelocityX(-config.playerSpeed).setFlipX(true);
-    } else {
-        bullet.setVelocityX(config.playerSpeed);
-    }
-}
-function destroyBulletAndObject(bullet, object) {
-    bullet.destroy();
-    object.destroy();
-}
 //Смуга символів
 function showTextSymbols(symbol, count){
     var symbolLine = ''
