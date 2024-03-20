@@ -164,11 +164,11 @@ function create() {
 
     stars.children.iterate(function (child) {
 
-        child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+        child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8)).setScale(0.5);
 
     });
     bombs = this.physics.add.group();
-    scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#ffffff' })
+    scoreText = this.add.text(16, 16, '👻: 0', { fontSize: '50px', fill: '#ffffff' })
         .setOrigin(0, 0)
         .setScrollFactor(0);
 
@@ -226,7 +226,7 @@ this.physics.add.collider(player, enemy, () => {
 
 }, null, this);
 //Кількість ворогів
-enemyText = this.add.text(300,50, showTextSymbols('👹', enemyCount),{fontSize: '40px', fill:'#FFF'})
+enemyText = this.add.text(45,70, showTextSymbols('😈', enemyCount),{fontSize: '40px', fill:'#FFF'})
 .setOrigin(0,0)
 .setScrollFactor(0)
 this.physics.add.collider(enemy, platforms);
@@ -331,19 +331,20 @@ function bulletEnemyCollisionHandler(bullet, enemy) {
     // Логіка, що відбувається при зіткненні пулі з ворогом
     bullet.disableBody(true, true);
     enemy.disableBody(true, true); // Вимкнення ворога
+    //Tree.disableBody(true, true);
     //bombs.disableBody(true, true);
 }
 //Додали збирання зірок персонажем 11
 function collectStar(player, star) {
     star.disableBody(true, true);
     score += 10;
-    scoreText.setText('Score: ' + score);
+    scoreText.setText('👻: ' + score);
 
     // Створення бомби
     var x = Phaser.Math.Between(0, worldWidth);
     var y = Phaser.Math.Between(0, config.height);
     var bomb = bombs.create(x, 0, 'bomb');
-    bomb.setScale(0.25);
+    bomb.setScale(0.75);
     bomb.setBounce(1);
     bomb.setCollideWorldBounds(true);
     bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
@@ -407,7 +408,7 @@ function collectHeart(player, heart) {
 
 function createWorldObjects(object, asset){
     // Додавання кущів випадковим чином на всю ширину екрану
-    for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(200, 500)) {
+    for (var x = 0; x < worldWidth; x = x + Phaser.Math.FloatBetween(500, 1000)) {
         var y = 1000;
         console.log(x, y);
         bush.create(x, y, asset)
