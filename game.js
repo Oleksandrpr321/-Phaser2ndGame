@@ -211,17 +211,23 @@ this.physics.add.collider(player,enemy, () => {
 enemy = this.physics.add.group({
     key: 'enemy',
     repeat: enemyCount,
-    setXY: { x: 1000, y: 1080-240, stepX: Phaser.Math.FloatBetween(500, 800) }
+    setXY: { x: 1000, y: 1080 - 150, stepX: Phaser.Math.FloatBetween(300,500)}
+})
+ enemy.children.iterate(function(child){
+child
+.setCollideWorldBounds(true)
+.setVelocityX(Phaser.Math.FloatBetween(-500,500))
 });
 
-enemy.children.iterate(function (child) {
-    child.setCollideWorldBounds(true).setVelocityX(Phaser.Math.FloatBetween(-500, 500)).setScale(0.25)
-});
+// колізія ворогів та гравця
+this.physics.add.collider(player, enemy, () => {
+    player.x = Phaser.Math.FloatBetween(-200, 200);
 
-enemyText = this.add.text(0, 50, showTextSymbols('😈', enemyCount), { fontSize: '40px', fill: '#FFF' }).setOrigin(0, 0).setScrollFactor(0)
-
-this.physics.add.collider(enemy, platforms);
-this.physics.add.collider(player, enemy, hitEnemy, null, this);
+}, null, this);
+//Кількість ворогів
+enemyText = this.add.text(300,50, showTextSymbols('👹', enemyCount),{fontSize: '40px', fill:'#FFF'})
+.setOrigin(0,0)
+.setScrollFactor(0)
 this.physics.add.collider(enemy, platforms);
 }
 
