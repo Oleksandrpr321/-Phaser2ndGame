@@ -40,6 +40,9 @@ var enemyText
 var symbolLine
 var symbol
 var TextSymbols
+var bulletts
+var fireRate = 500; // Час у мілісекундах між вистрілами
+var lastFired = 0; // Час останньої генерації пулі
 
 function preload() {
     //Завантажили асетси 2
@@ -65,6 +68,7 @@ function preload() {
 }
 
 function create() {
+   
     //Створюємо небо 3
     this.add.tileSprite(0, 0, worldWidth, 1080, "fon+")
         .setOrigin(0, 0);
@@ -103,10 +107,6 @@ function create() {
     });
 
     resetButton.setVisible(false); // Початково ховаємо кнопку
-
-
-   
-
 
     player = this.physics.add.sprite(1500, 900, 'dude');
     player.setBounce(0.2);
@@ -231,8 +231,18 @@ enemyText = this.add.text(300,50, showTextSymbols('👹', enemyCount),{fontSize:
 this.physics.add.collider(enemy, platforms);
 
 
+    // Створення групи для пуль
+    bullets = this.physics.add.group();
+     // Додавання колайдеру пуль з платформами
+     this.physics.add.collider(bullets, platforms);
+
+     // Додавання колайдеру пуль з ворогами
+     this.physics.add.collider(bullets, enemy, bulletEnemyCollisionHandler);
+     // Додавання колайдеру пуль з бомбами
+     this.physics.add.collider(bullets, bombs, bulletEnemyCollisionHandler);
 
 }
+
 
 function update() {
     
@@ -274,8 +284,48 @@ child.setVelocityX(Phaser.Math.FloatBetween(-500,500))
     if (cursors.up.isDown && player.body.touching.down) {
         player.setVelocityY(-480);
     }
-    
+   // Перевірка натискання клавіші пробіл та інтервалу між пострілами
+   if (cursors.space.isDown && (this.time.now > lastFired + fireRate)) {
+    fireBullet();
+    lastFired = this.time.now;
+
+   }
 }
+
+
+if (cursors.space.isDown && !fire) {
+    // Запускаємо пулю лише якщо вона ще не існує
+    fire = this.physics.add.sprite(player.x, player.y, 'fire');
+    fire.setScale(0.1).setVelocityX(player.body.velocity.x * 2);
+
+    // Колізія пулі з ворогом
+    this.physics.add.collider(fire, enemy, function(fire, enemy) {
+        // Відключаємо пулю та ворога
+        fire.disableBody(true, true);
+        enemy.disableBody(true, true);
+        fire = null; // Очищуємо посилання на пулю
+    });
+
+    // Колізія пулі з платформами
+    this.physics.add.collider(fire, platforms);
+
+    // Додавання колайдеру пуль з ворогами
+   // enemy = this.physics.add.group();
+    this.physics.add.collider(bullets, enemy, bulletEnemyCollisionHandler);
+}
+
+}
+function fireBullet() {
+    // Створення пулі
+    fire = bullets.create(player.x, player.y, 'fire');
+    fire.setScale(0.1).setVelocityX(player.body.velocity.x * 2);
+}
+
+function bulletEnemyCollisionHandler(bullet, enemy) {
+    // Логіка, що відбувається при зіткненні пулі з ворогом
+    bullet.disableBody(true, true);
+    enemy.disableBody(true, true); // Вимкнення ворога
+    //bombs.disableBody(true, true);
 }
 //Додали збирання зірок персонажем 11
 function collectStar(player, star) {
@@ -328,7 +378,16 @@ function showLife() {
     }
     return lifeLine
 }
+//Смуга символів
+function showTextSymbols(symbol, count){
+    var symbolLine = ''
 
+    for (var i = 0; i < count; i++) {
+        symbolLine = symbolLine + symbol
+    }
+
+    return symbolLine 
+}
 
 function collectHeart(player, heart) {
     heart.disableBody(true, true);
@@ -353,13 +412,4 @@ function createWorldObjects(object, asset){
 }
 }
 
-//Смуга символів
-function showTextSymbols(symbol, count){
-    var symbolLine = ''
 
-    for (var i = 0; i < count; i++) {
-        symbolLine = symbolLine + symbol
-    }
-
-    return symbolLine 
-}
