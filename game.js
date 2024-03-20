@@ -44,6 +44,7 @@ var bulletts
 var fireRate = 500; // Час у мілісекундах між вистрілами
 var lastFired = 0; // Час останньої генерації пулі
 
+
 function preload() {
     //Завантажили асетси 2
     this.load.image('bush', 'assets/bush.png');
@@ -240,6 +241,7 @@ this.physics.add.collider(enemy, platforms);
      this.physics.add.collider(bullets, enemy, bulletEnemyCollisionHandler);
      // Додавання колайдеру пуль з бомбами
      this.physics.add.collider(bullets, bombs, bulletEnemyCollisionHandler);
+     
 
 }
 
@@ -296,8 +298,8 @@ child.setVelocityX(Phaser.Math.FloatBetween(-500,500))
 if (cursors.space.isDown && !fire) {
     // Запускаємо пулю лише якщо вона ще не існує
     fire = this.physics.add.sprite(player.x, player.y, 'fire');
-    fire.setScale(0.1).setVelocityX(player.body.velocity.x * 2);
-
+    fire.setScale(0.009).setVelocityX(player.body.velocity.x * 2);
+    fire.body.setBounce(1);
     // Колізія пулі з ворогом
     this.physics.add.collider(fire, enemy, function(fire, enemy) {
         // Відключаємо пулю та ворога
@@ -319,6 +321,10 @@ function fireBullet() {
     // Створення пулі
     fire = bullets.create(player.x, player.y, 'fire');
     fire.setScale(0.1).setVelocityX(player.body.velocity.x * 2);
+    // Встановлюємо затримку перед відключенням пулі через 3000 мілісекунд (3 секунди)
+    setTimeout(() => {
+        fire.disableBody(true, true);
+    }, 3000);
 }
 
 function bulletEnemyCollisionHandler(bullet, enemy) {
