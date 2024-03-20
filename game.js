@@ -33,7 +33,13 @@ var game = new Phaser.Game(config);
 var worldWidth = 9600;
 var playerSpeed = 1000
 // var collectStarSound; // Оголошуємо змінну для збереження звуку
-var bullets;
+var fire;
+var enemy;
+var enemyCount
+var enemyText
+var symbolLine
+var symbol
+var TextSymbols
 
 function preload() {
     //Завантажили асетси 2
@@ -54,8 +60,8 @@ function preload() {
     // this.load.audio('collectStarSound',   'assets/collectStarSound.mp3');
     this.load.image('resetButton', 'assets/resetButton.png');
     this.load.image('heart', 'assets/life.png');
-    //this.load.image('enemy', 'assets/zombie.png');
-    this.load.image('bullett', 'assets/bullet1.png')
+    this.load.image('enemy', 'assets/zombie.png');
+    this.load.image('fire', 'assets/bullet1.png')
 }
 
 function create() {
@@ -193,19 +199,44 @@ function create() {
     this.physics.add.collider(player, platforms);
     this.physics.add.collider(stars, platforms);
     this.physics.add.collider(bombs, platforms);
-
+    //
     //Перевіримо чи перекривається персонаж зіркою 10
     this.physics.add.overlap(player, stars, collectStar, null, this);
     this.physics.add.collider(player, bombs, hitBomb, null, this);
 
-//     //Ворог
-//     enemy.children.iterate(function(child){
-// child.setCollideWorldBounds(true);
-//     });
-//     this.physics.add.collider(enemy, player);
+this.physics.add.collider(player,enemy, () => {
+    player.x = player.x + Phaser.Math.FloatBetween(-200,200);
+}, null,this);
+//Ворог випадковим чином на всю ширину світу
+enemy = this.physics.add.group({
+    key: 'enemy',
+    repeat: enemyCount,
+    setXY: { x: 1000, y: 1080-240, stepX: Phaser.Math.FloatBetween(500, 800) }
+});
+
+enemy.children.iterate(function (child) {
+    child.setCollideWorldBounds(true).setVelocityX(Phaser.Math.FloatBetween(-500, 500)).setScale(0.25)
+});
+
+enemyText = this.add.text(0, 50, showTextSymbols('😈', enemyCount), { fontSize: '40px', fill: '#FFF' }).setOrigin(0, 0).setScrollFactor(0)
+
+this.physics.add.collider(enemy, platforms);
+this.physics.add.collider(player, enemy, hitEnemy, null, this);
+this.physics.add.collider(enemy, platforms);
 }
 
 function update() {
+    //Агро радіус
+    if (Math.abs(player.x - enemy.x) < 600) {
+        enemy.moveTo(player, player.x, player.y, 300,1)
+    }
+    //
+    enemy.children.iterate((child) => {
+        if (Math.random() < 0.01) {
+child.setVelocityX(Phaser.Math.FloatBetween(-500,500))
+        }
+    })
+
     if (gameOver) {
         return;
     }
@@ -233,26 +264,7 @@ function update() {
     if (cursors.up.isDown && player.body.touching.down) {
         player.setVelocityY(-480);
     }
-// enemy.children.iterate(function(child){
-
-// });
     
-bullets = this.physics.add.group();
-
-this.physics.add.collider(bullets, platforms, function (bullet) {
-    bullet.destroy();
-}, null, this);
-
-this.input.on('pointerdown', function (pointer) {
-    if (pointer.leftButtonDown()) {
-        fireBullet();
-    }
-}, this);
-
-this.physics.add.overlap(bullets, stars, destroyBulletAndObject, null, this);
-this.physics.add.overlap(bullets, bombs, destroyBulletAndObject, null, this);
-this.physics.add.overlap(bullets, Skeleton, destroyBulletAndObject, null, this);
-this.physics.add.overlap(bullets, bush, destroyBulletAndObject, null, this);
 }
 }
 //Додали збирання зірок персонажем 11
@@ -296,6 +308,8 @@ function hitBomb(player, bomb) {
     }
 }
 
+
+
 function showLife() {
     var lifeLine = ''
 
@@ -304,6 +318,8 @@ function showLife() {
     }
     return lifeLine
 }
+
+
 function collectHeart(player, heart) {
     heart.disableBody(true, true);
 
@@ -340,4 +356,14 @@ function fireBullet() {
 function destroyBulletAndObject(bullet, object) {
     bullet.destroy();
     object.destroy();
+}
+//Смуга символів
+function showTextSymbols(symbol, count){
+    var symbolLine = ''
+
+    for (var i = 0; i < count; i++) {
+        symbolLine = symbolLine + symbol
+    }
+
+    return symbolLine 
 }
