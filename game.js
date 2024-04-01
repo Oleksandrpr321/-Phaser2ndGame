@@ -35,7 +35,7 @@ var playerSpeed = 1000
 // var collectStarSound; // Оголошуємо змінну для збереження звуку
 var fire;
 var enemy;
-var enemyCount = 3
+var enemyCount = 4
 var enemyText
 var symbolLine
 var symbol
@@ -211,7 +211,7 @@ this.physics.add.collider(player,enemy, () => {
 //Ворог випадковим чином на всю ширину світу
 enemy = this.physics.add.group({
     key: 'enemy',
-    repeat: enemyCount,
+    repeat: enemyCount - 1,
     setXY: { x: 1000, y: 1080 - 150, stepX: Phaser.Math.FloatBetween(300,500)}
 })
  enemy.children.iterate(function(child){
@@ -331,6 +331,8 @@ function bulletEnemyCollisionHandler(bullet, enemy) {
     // Логіка, що відбувається при зіткненні пулі з ворогом
     bullet.disableBody(true, true);
     enemy.disableBody(true, true); // Вимкнення ворога
+    enemyCount -= 1
+    enemyText.setText(showTextSymbols('😈', enemyCount))
     //Tree.disableBody(true, true);
     //bombs.disableBody(true, true);
 }
