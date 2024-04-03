@@ -65,7 +65,7 @@ function preload() {
     this.load.image('resetButton', 'assets/resetButton.png');
     this.load.image('heart', 'assets/life.png');
     this.load.image('enemy', 'assets/zombie.png');
-    this.load.image('fire', 'assets/bullet1.png')
+    this.load.image('fire', 'assets/bullet2.png')
 }
 
 function create() {
