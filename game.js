@@ -41,7 +41,7 @@ var symbolLine
 var symbol
 var TextSymbols
 var bulletts
-var fireRate = 0; // Час у мілісекундах між вистрілами
+var fireRate = 500; // Час у мілісекундах між вистрілами
 var lastFired = 0; // Час останньої генерації пулі
 
 
