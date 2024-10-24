@@ -43,6 +43,7 @@ var TextSymbols
 var bulletts
 var fireRate = 500; // Час у мілісекундах між вистрілами
 var lastFired = 0; // Час останньої генерації пулі
+var finishButton;
 
 
 function preload() {
@@ -63,6 +64,7 @@ function preload() {
     this.load.image('Tree', 'assets/Tree.png');
     // this.load.audio('collectStarSound',   'assets/collectStarSound.mp3');
     this.load.image('resetButton', 'assets/resetButton.png');
+    this.load.image('finishButton', 'assets/finishButton.png');
     this.load.image('heart', 'assets/life.png');
     this.load.image('enemy', 'assets/zombie.png');
     this.load.image('fire', 'assets/bullet2.png')
@@ -99,7 +101,7 @@ function create() {
   
     resetButton = this.add.image(900, 500, 'resetButton')
     resetButton.setOrigin(0,0)
-    .setDepth(10)
+    .setDepth(5)
     .setScrollFactor(0)
     .setInteractive()
     .on('pointerdown', function() {
@@ -108,6 +110,19 @@ function create() {
     });
 
     resetButton.setVisible(false); // Початково ховаємо кнопку
+
+    finishButton = this.add.image(580, 200, 'finishButton')
+    finishButton.setOrigin(0,0)
+    .setDepth(10)
+    .setScrollFactor(0)
+    .setInteractive()
+    .on('pointerdown', function() {
+        // Перезавантаження гри
+        location.reload();
+    });
+
+    finishButton.setVisible(false); // Початково ховаємо кнопку
+
 
     player = this.physics.add.sprite(1500, 900, 'dude');
     player.setBounce(0.2);
@@ -242,7 +257,7 @@ this.physics.add.collider(enemy, platforms);
      // Додавання колайдеру пуль з бомбами
      this.physics.add.collider(bullets, bombs, bulletEnemyCollisionHandler);
      
-
+     
 }
 
 
@@ -341,7 +356,9 @@ function collectStar(player, star) {
     star.disableBody(true, true);
     score += 10;
     scoreText.setText('👻: ' + score);
-
+    if (score >= 50) {
+        finishButton.setVisible(true); // Показуємо кнопку "Finish"
+    }
     // Створення бомби
     var x = Phaser.Math.Between(0, worldWidth);
     var y = Phaser.Math.Between(0, config.height);
