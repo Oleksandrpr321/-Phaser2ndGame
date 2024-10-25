@@ -111,8 +111,10 @@ function create() {
 
     resetButton.setVisible(false); // Початково ховаємо кнопку
 
-    finishButton = this.add.image(580, 200, 'finishButton')
-    finishButton.setOrigin(0,0)
+    
+    finishButton = this.add.image(960, 540, 'finishButton') // Центруємо кнопку
+    .setOrigin(0.5, 0.5) // Встановлюємо центр для трансформації
+    .setScale(0.1) // Зменшуємо розмір кнопки
     .setDepth(10)
     .setScrollFactor(0)
     .setInteractive()
@@ -132,11 +134,18 @@ function create() {
     this.physics.world.setBounds(0, 0, worldWidth, 1080);
     //Слідкування камери за гравцем
     this.cameras.main.startFollow(player);
+ // Висота стрибка гравця
+    const jumpHeight = 480; // Висота стрибка
+
 
 //Рандом платформи в повітрі
     for (var x = 0; x < worldWidth; x = x + Phaser.Math.Between(800, 1000)) {
-        var y = Phaser.Math.Between(550, 810)
-
+        var y = Phaser.Math.Between(530, 750)
+        const platformGap = 150; // Відстань між платформами
+        // Переконуємося, що платформа не нижче дозволеного рівня
+        if (y < 550) {
+            y = 550;
+        }
         platforms.create(x, y, 'skyGroundStart')
         var i
         for (i = 1; i <= Phaser.Math.Between(1, 5); i++) {
@@ -358,6 +367,7 @@ function collectStar(player, star) {
     scoreText.setText('👻: ' + score);
     if (score >= 50) {
         finishButton.setVisible(true); // Показуємо кнопку "Finish"
+        this.physics.pause();
     }
     // Створення бомби
     var x = Phaser.Math.Between(0, worldWidth);
