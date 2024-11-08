@@ -19,7 +19,7 @@ var config = {
 };
 var resetButton;
 var lifeLine = ''
-var life = 3;
+var life = 1;
 var player;
 var stars;
 var bombs;
@@ -313,17 +313,10 @@ child.setVelocityX(Phaser.Math.FloatBetween(-500,500))
 
 
 if (cursors.space.isDown && !fire) {
-    // Запускаємо пулю лише якщо вона ще не існує
-    fire = this.physics.add.sprite(player.x, player.y, 'fire');
-    fire.setScale(0.009).setVelocityX(player.body.velocity.x * 2);
-    fire.body.setBounce(1);
-    // Колізія пулі з ворогом
-    this.physics.add.collider(fire, enemy, function(fire, enemy) {
-        // Відключаємо пулю та ворога
-        fire.disableBody(true, true);
-        enemy.disableBody(true, true);
-        fire = null; // Очищуємо посилання на пулю
-    });
+    if (cursors.space.isDown && (this.time.now > lastFired + fireRate)) {
+        fireBullet();
+        lastFired = this.time.now;
+    }
 
     // Колізія пулі з платформами
     this.physics.add.collider(fire, platforms);
