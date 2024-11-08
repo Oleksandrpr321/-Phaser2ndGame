@@ -41,10 +41,10 @@ var symbolLine
 var symbol
 var TextSymbols
 var bulletts
-var fireRate = 500; // Час у мілісекундах між вистрілами
+var fireRate = 1000; // Час у мілісекундах між вистрілами
 var lastFired = 0; // Час останньої генерації пулі
 var finishButton;
-
+var finalScore =200
 
 function preload() {
     //Завантажили асетси 2
@@ -185,7 +185,7 @@ function create() {
 
     });
     bombs = this.physics.add.group();
-    scoreText = this.add.text(16, 16, '👻: 0', { fontSize: '50px', fill: '#ffffff' })
+    scoreText = this.add.text(16, 16, '👻: ' + score + " / "+finalScore, { fontSize: '50px', fill: '#ffffff' })
         .setOrigin(0, 0)
         .setScrollFactor(0);
 
@@ -357,8 +357,8 @@ function bulletEnemyCollisionHandler(bullet, enemy) {
 function collectStar(player, star) {
     star.disableBody(true, true);
     score += 10;
-    scoreText.setText('👻: ' + score);
-    if (score >=60) {
+    scoreText.setText('👻: ' + score+" / "+finalScore);
+    if (score >= finalScore) {
         finishButton.setVisible(true); // Показуємо кнопку "Finish"
         gameOver = true;
         this.physics.pause();
