@@ -134,18 +134,11 @@ function create() {
     this.physics.world.setBounds(0, 0, worldWidth, 1080);
     //Слідкування камери за гравцем
     this.cameras.main.startFollow(player);
- // Висота стрибка гравця
-    const jumpHeight = 480; // Висота стрибка
-
 
 //Рандом платформи в повітрі
     for (var x = 0; x < worldWidth; x = x + Phaser.Math.Between(800, 1000)) {
-        var y = Phaser.Math.Between(530, 750)
-        const platformGap = 150; // Відстань між платформами
-        // Переконуємося, що платформа не нижче дозволеного рівня
-        if (y < 550) {
-            y = 550;
-        }
+        var y = Phaser.Math.Between(550, 810)
+
         platforms.create(x, y, 'skyGroundStart')
         var i
         for (i = 1; i <= Phaser.Math.Between(1, 5); i++) {
@@ -365,9 +358,11 @@ function collectStar(player, star) {
     star.disableBody(true, true);
     score += 10;
     scoreText.setText('👻: ' + score);
-    if (score >= 50) {
+    if (score >=60) {
         finishButton.setVisible(true); // Показуємо кнопку "Finish"
+        gameOver = true;
         this.physics.pause();
+        player.anims.play('turn');
     }
     // Створення бомби
     var x = Phaser.Math.Between(0, worldWidth);
